@@ -1,0 +1,18 @@
+{
+  "name":        "GC9A01A AVR",
+  "keywords":    "GC9A01A, ips, round, avr, fast, spi",
+  "description": "Fast SPI library for the GC9A01A IPS display optimized for AVR Arduinos",
+  "authors":
+  {
+    "name":  "Pawel A. Hernik",
+    "email": "pawelhernik123@gmail.com"
+  },
+  "repository":
+  {
+    "type": "git",
+    "url":  "https://github.com/cbm80amiga/GC9A01A_AVR.git"
+  },
+  "version":    "1.0.2",
+  "frameworks": "arduino",
+  "platforms":  "*"
+}
