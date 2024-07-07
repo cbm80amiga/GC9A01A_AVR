@@ -56,6 +56,8 @@ Tested with **Arduino IDE 1.6.5 and Adafruit_GFX 1.5.6**
 
 If you find it useful and want to buy me a coffee or a beer:
 
+https://buycoffee.to/cbm80
+
 https://www.paypal.me/cbm80amiga
 
 [license-badge]: https://img.shields.io/badge/License-GPLv3-blue.svg
