@@ -1,5 +1,7 @@
 // GC9A01A library example
 // (c) 2024 Pawel A. Hernik
+// YouTube video:
+// https://youtu.be/9RZII8Vx2ZY
 
 /*
  GC9A01A 240x240 round 1.28" IPS - only 4+2 wires required:
@@ -10,7 +12,7 @@
  #04 SDA -> D11/MOSI
  #05 DC  -> D9 or any digital
  #06 CS  -> D10 or any digital
- #07 RST -> NC
+ #07 RST -> opt
 */
 
 #include <SPI.h>
@@ -148,7 +150,7 @@ void setup(void)
 
   int c1=YELLOW, c2=WHITE;
   tft.fillScreen(BLACK);
-  tft.setCursor(0, 0);
+  tft.setCursor(0,60);
   tft.setTextSize(2);
   tft.setTextColor(CYAN);
   tft.println("RESULTS:");

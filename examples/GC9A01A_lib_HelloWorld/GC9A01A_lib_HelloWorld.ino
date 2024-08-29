@@ -1,8 +1,10 @@
 // GC9A01A library example
 // (c) 2019-24 Pawel A. Hernik
+// YouTube video:
+// https://youtu.be/9RZII8Vx2ZY
 
 /*
- GC9A01A 240x240 round 1.28" IPS - only 4+2 wires required:
+ GC9A01A 240x240/round connections (only 4+2 wires required):
 
  #01 VCC -> VCC (3.3V only?)
  #02 GND -> GND
@@ -10,7 +12,7 @@
  #04 SDA -> D11/MOSI
  #05 DC  -> D9 or any digital
  #06 CS  -> D10 or any digital
- #07 RST -> NC
+ #07 RST -> opt
 */
 
 #include <SPI.h>

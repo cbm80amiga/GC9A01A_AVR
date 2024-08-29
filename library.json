@@ -12,7 +12,7 @@
     "type": "git",
     "url":  "https://github.com/cbm80amiga/GC9A01A_AVR.git"
   },
-  "version":    "1.0.2",
+  "version":    "1.0.3",
   "frameworks": "arduino",
   "platforms":  "*"
 }

@@ -131,6 +131,23 @@ static const uint8_t PROGMEM init_240x240[] = {
   0x00                  // End of list
 };
 // -----------------------------------------
+#if FASTLINE_CLIP==2
+// clip to circle precalculated edge values
+const uint8_t cornerPGM[120] PROGMEM = {
+104,98,93,89,85,82,79,76,74,72,
+69,67,65,63,61,60,58,56,55,53,
+52,50,49,48,46,45,44,42,41,40,
+39,38,37,36,35,34,33,32,31,30,
+29,28,27,27,26,25,24,24,23,22,
+21,21,20,19,19,18,17,17,16,16,
+15,14,14,13,13,12,12,11,11,10,
+10,10,9,9,8,8,7,7,7,6,
+6,6,5,5,5,4,4,4,4,3,
+3,3,3,2,2,2,2,2,1,1,
+1,1,1,1,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0 };
+#endif
+// -----------------------------------------
 
 #ifdef COMPATIBILITY_MODE
 static SPISettings spiSettings;
@@ -469,12 +486,31 @@ void GC9A01A_AVR::drawPixel(int16_t x, int16_t y, uint16_t color)
 }
 
 // ----------------------------------------------------------
+// full clipping
 void GC9A01A_AVR::drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color) 
 {
+#if FASTLINE_CLIP==2 // clip to circle, 180 bytes more
+  if(x<0 || x>=240) return;
+  int y0=pgm_read_byte(&cornerPGM[x<120 ? x : 239-x]); // PGM
+  int y1=239-y0;
+  if(y>y1) return;
+  if(y<y0) { h+=y-y0; y=y0; }
+  if(h<=0) return;
+  if(y+h>y1+1) h=y1-y+1;
+#elif FASTLINE_CLIP==1 // cut corners only, 56 bytes more
+  int y0=0,y1,e=70;
+  if(x<e) y0=e-x; else if(x>239-e) y0=x-239+e;
+  y1=239-y0;
+  if(y>y1) return;
+  if(y<y0) { h+=y-y0; y=y0; }
+  if(h<=0) return;
+  if(y+h>y1+1) h=y1+1-y; 
+#else // full 240x240 frame
   if(x>=_width || y>=_height || h<=0) return;
-  if(y+h-1>=_height) h=_height-y;
+  if(y+h>_height) h=_height-y;
   if(y<0) { h+=y; y=0; }
   if(h<=0) return;
+#endif
   setAddrWindow(x, y, x, y+h-1);
 
   writeMulti(color,h);
@@ -484,12 +520,31 @@ void GC9A01A_AVR::drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color)
 }
 
 // ----------------------------------------------------------
+// full clipping
 void GC9A01A_AVR::drawFastHLine(int16_t x, int16_t y, int16_t w,  uint16_t color) 
 {
+#if FASTLINE_CLIP==2 // clip to circle, 180 bytes of code more
+  if(y<0 || y>=240) return;
+  int x0=pgm_read_byte(&cornerPGM[y<120 ? y : 239-y]); // PGM
+  int x1=239-x0;
+  if(x>x1) return;
+  if(x<x0) { w+=x-x0; x=x0; }
+  if(w<=0) return;
+  if(x+w>x1+1) w=x1-x+1;
+#elif FASTLINE_CLIP==1 // cut corners only, 56 bytes of code more
+  int x0=0,x1,e=70;
+  if(y<e) x0=e-y; else if(y>239-e) x0=y-239+e;
+  x1=239-x0;
+  if(x>x1) return;
+  if(x<x0) { w+=x-x0; x=x0; }
+  if(w<=0) return;
+  if(x+w>x1+1) w=x1+1-x;
+#else // full 240x240 frame
   if(x>=_width || y>=_height || w<=0) return;
-  if(x+w-1>=_width)  w=_width-x;
+  if(x+w>_width)  w=_width-x;
   if(x<0) { w+=x; x=0; }
   if(w<=0) return;
+#endif
   setAddrWindow(x, y, x+w-1, y);
 
   writeMulti(color,w);
@@ -499,17 +554,12 @@ void GC9A01A_AVR::drawFastHLine(int16_t x, int16_t y, int16_t w,  uint16_t color
 }
 
 // ----------------------------------------------------------
-void GC9A01A_AVR::fillScreen(uint16_t color) 
-{
-  fillRect(0, 0,  _width, _height, color);
-}
-
-// ----------------------------------------------------------
+// full clipping
 void GC9A01A_AVR::fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color) 
 {
   if(x>=_width || y>=_height || w<=0 || h<=0) return;
-  if(x+w-1>=_width)  w=_width -x;
-  if(y+h-1>=_height) h=_height-y;
+  if(x+w>_width)  w=_width -x;
+  if(y+h>_height) h=_height-y;
   if(x<0) { w+=x; x=0; }
   if(w<=0) return;
   if(y<0) { h+=y; y=0; }
@@ -523,12 +573,18 @@ void GC9A01A_AVR::fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t 
 }
 
 // ----------------------------------------------------------
-// draws image from RAM
+void GC9A01A_AVR::fillScreen(uint16_t color) 
+{
+  fillRect(0, 0,  _width, _height, color);
+}
+
+// ----------------------------------------------------------
+// draws image from RAM, only basic clipping
 void GC9A01A_AVR::drawImage(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t *img16) 
 {
-  // all protections and clipping should be done on the application side
-  if(w<=0 || h<=0) return;  // left for compatibility
-  //if(x>=_width || y>=_height || w<=0 || h<=0) return;
+  // all clipping should be on the application side
+  //if(w<=0 || h<=0) return;  // left for compatibility
+  if(x>=_width || y>=_height || w<=0 || h<=0) return;
   //if(x+w-1>=_width)  w=_width -x;
   //if(y+h-1>=_height) h=_height-y;
   setAddrWindow(x, y, x+w-1, y+h-1);
@@ -580,6 +636,7 @@ void GC9A01A_AVR::invertDisplay(boolean mode)
 }
 
 // ----------------------------------------------------------
+// doesn't work?
 void GC9A01A_AVR::partialDisplay(boolean mode) 
 {
   writeCmd(mode ? GC9A01A_PTLON : GC9A01A_NORON);
@@ -629,6 +686,7 @@ void GC9A01A_AVR::setScroll(uint16_t vsp)
 }
 
 // ----------------------------------------------------------
+// doesn't work?
 void GC9A01A_AVR::setPartArea(uint16_t sr, uint16_t er) 
 {
   writeCmd(GC9A01A_PTLAR);

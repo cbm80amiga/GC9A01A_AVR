@@ -1,7 +1,9 @@
 // GC9A01A library example
 // Amiga Boing Ball Demo
 // (c) 2019-24 Pawel A. Hernik
-// YT video: https://youtu.be/KwtkfmglT-c
+// YouTube videos:
+// https://youtu.be/KwtkfmglT-c
+// https://youtu.be/9RZII8Vx2ZY
 
 /*
  GC9A01A 240x240 round 1.28" IPS - only 4+2 wires required:
@@ -35,15 +37,13 @@ uint16_t bgColS   = RGBto565(100,100,100);
 uint16_t lineCol  = RGBto565(150,40,150);
 uint16_t lineColS = RGBto565(90,20,90);
 
+#define BALL_WD 64
+#define BALL_HT 64
+#define BALL_SWD SCR_WD
+#define BALL_SHT 180
 #define LINE_YS  20
 #define LINE_XS1 30
 #define LINE_XS2 6
-
-#define BALL_WD 64
-#define BALL_HT 64
-#define BALL_SWD 240
-#define BALL_SHT 180
-
 #define SP 20
 
 #define SHADOW 20
@@ -52,6 +52,7 @@ uint16_t lineColS = RGBto565(90,20,90);
 // AVR stats:
 // with shadow        - 60-61ms/17fps
 // without shadow     - 55-56ms/18fps
+// with shadow        - 38-40ms/26fps -> new partial line copying
 
 void drawBall(int x, int y)
 {
@@ -60,7 +61,7 @@ void drawBall(int x, int y)
     uint8_t v,*img = (uint8_t*)ball+16*2+6+j*BALL_WD/2+BALL_WD/2;
     int yy=y+j;
     if(yy==LINE_YS      || yy==LINE_YS+1*SP || yy==LINE_YS+2*SP || yy==LINE_YS+3*SP || yy==LINE_YS+4*SP || yy==LINE_YS+5*SP || yy==LINE_YS+6*SP ||
-       yy==LINE_YS+7*SP) {  // ugly but fast
+       yy==LINE_YS+7*SP) {  // ugly but faster
     //if(((yy-LINE_YS)%SP)==0) {
       for(i=0;i<LINE_XS1;i++) line[i]=line[SCR_WD-1-i]=bgCol;
       for(i=0;i<=SCR_WD-LINE_XS1*2;i++) line[i+LINE_XS1]=lineCol;
@@ -85,7 +86,11 @@ void drawBall(int x, int y)
         #endif
       }
     }
-    lcd.drawImage(0,yy,SCR_WD,1,line);
+    //lcd.drawImage(0,yy,SCR_WD,1,line); // old full line copy
+    int bx=x-2,bw=BALL_WD+SHADOW+2+2; // 2 pixels are safe enough
+    if(bx<0) bx=0;
+    if(bx+bw>SCR_WD) bw=SCR_WD-bx;
+    lcd.drawImage(bx,yy,bw,1,line+bx); // optimized part line copy
   }
 }
 
@@ -109,7 +114,7 @@ void setup()
   o=2*(7+6+4)*dx/dy;
   lcd.drawFastHLine(LINE_XS2+o,SCR_HT-LINE_YS-(7+6+4)*2, SCR_WD-LINE_XS2*2-o*2, lineCol);
   for(i=0;i<10;i++) lcd.drawLine(LINE_XS1+i*SP, LINE_YS+SP*8, LINE_XS2+i*(SCR_WD-LINE_XS2*2)/9, SCR_HT-LINE_YS, lineCol);
-  delay(10000);
+  //delay(10000);
 }
 
 int anim=0, animd=2;

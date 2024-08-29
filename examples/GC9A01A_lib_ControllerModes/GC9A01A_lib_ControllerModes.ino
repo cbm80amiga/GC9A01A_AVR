@@ -1,5 +1,7 @@
 // GC9A01A library example
 // (c) 2019-24 Pawel A. Hernik
+// YouTube video:
+// https://youtu.be/9RZII8Vx2ZY
 
 // requires RRE Font library:
 // https://github.com/cbm80amiga/RREFont

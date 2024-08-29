@@ -1,13 +1,14 @@
 // GC9A01A library example
-// Analog watch/clock, AVR + DS1307/DS3231 RTC module
+// Analog watch/clock, AVR + optional DS1307/DS3231 RTC module
 // (c) 2024 Pawel A. Hernik
 // YT videos:
+// https://youtu.be/9RZII8Vx2ZY
 // https://youtu.be/jFGDFuLhdMc 
 // https://youtu.be/35Z0enhEYqM 
 // https://youtu.be/Xr-dxPhePhY
 
 /*
- GC9A01A 240x240 round 1.28" IPS - only 4+2 wires required:
+ GC9A01A 240x240/round connections (only 4+2 wires required):
 
  #01 VCC -> VCC (3.3V only?)
  #02 GND -> GND
@@ -15,7 +16,7 @@
  #04 SDA -> D11/MOSI
  #05 DC  -> D9 or any digital
  #06 CS  -> D10 or any digital
- #07 RST -> NC
+ #07 RST -> opt
 */
 
 #include <SPI.h>
@@ -34,8 +35,8 @@ GC9A01A_AVR lcd(TFT_CS, TFT_DC);
 //#include "clk.h"
 //#include "sansmains.h"
 //#include "smartq02.h"
-//#include "kit.h"
-#include "smartq07.h"
+#include "kit.h"
+//#include "smartq07.h"
 const unsigned char *clockface = dial2bit;
 
 //#include "small4x6_font.h"

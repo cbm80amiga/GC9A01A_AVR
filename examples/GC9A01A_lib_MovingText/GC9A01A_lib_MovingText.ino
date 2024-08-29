@@ -1,8 +1,9 @@
 // GC9A01A library example
 // (C)2019-24 Pawel A. Hernik
-
 // requires RRE Font library:
 // https://github.com/cbm80amiga/RREFont
+// YT video:
+// https://youtu.be/9RZII8Vx2ZY
 
 /*
  GC9A01A 240x240 round 1.28" IPS - only 4+2 wires required:

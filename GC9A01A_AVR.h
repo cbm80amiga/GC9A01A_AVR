@@ -11,6 +11,10 @@
 
 // define when CS pin is always connected to the ground
 #define CS_ALWAYS_LOW
+
+// optimize fast line clipping #0=off, #1=cut corners, #2=clip using circle
+// when fullscreen scrolling is used use rather regular clipping #0
+#define FASTLINE_CLIP 2
 // ------------------------------
 
 //#include "Arduino.h"
@@ -18,8 +22,8 @@
 #include <Adafruit_GFX.h>
 //#include <avr/pgmspace.h>
 
-#define GC9A01A_TFTWIDTH 	240
-#define GC9A01A_TFTHEIGHT 	240
+#define GC9A01A_TFTWIDTH  240
+#define GC9A01A_TFTHEIGHT 240
 
 // Color definitions
 
