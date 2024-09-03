@@ -46,8 +46,18 @@ Tested with **Arduino IDE 1.6.5 and Adafruit_GFX 1.5.6**
 - optimized fast line clipping #0=off, #1=cut corners, #2=clip using circle, use "#define FASTLINE_CLIP <mode>"
 
 ## Tested displays:
+
 - round 240x240 1.28" IPS on round PCB
+
+|Circuit|Front|Back|
+|--|--|--|
+|<img src="images/round1.jpg" title="round1" /> |<img src="images/round1a.jpg" /> |<img src="images/round1b.jpg" />|
+
 - round 240x240 1.28" IPS on square PCB
+
+|Circuit|Front|Back|
+|--|--|--|
+|<img src="images/round2.jpg" title="round2" /> |<img src="images/round2a.jpg" /> |<img src="images/round2b.jpg" />|
 
 ## Connections - only 4 signal wires + VCC + GND are necessary:
 
