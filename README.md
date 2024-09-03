@@ -19,13 +19,13 @@ https://www.youtube.com/playlist?list=PLxb1losWErZ7thUyB05phRR3DoiYN_kcD
 
 ## Configuration
 
-Use "define COMPATIBILITY_MODE" - then the library should work on all Arduino compatible boards
+Use **#define COMPATIBILITY_MODE** - then the library should work on all Arduino compatible boards
 
 Remove above for the best performance on 16MHz AVR
 
-Use "#define CS_ALWAYS_LOW" for LCD boards where CS pin is internally connected to the ground, it gives better performance
+Use **#define CS_ALWAYS_LOW** for LCD boards where CS pin is internally connected to the ground, it gives better performance
 
-Optimized fast line clipping (define FASTLINE_CLIP): #0=off, #1=cut corners, #2=clip using circle
+Optimized fast line clipping (**#define FASTLINE_CLIP mode**): #0=off, #1=cut corners, #2=clip using circle
 
 Use "#define FASTLINE_CLIP 2" for maximum performance
 
