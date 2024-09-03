@@ -43,7 +43,7 @@ Tested with **Arduino IDE 1.6.5 and Adafruit_GFX 1.5.6**
 - setScrollArea() and setScroll() - smooth vertical scrolling
 - fast drawImage() from RAM
 - fast drawImage() from flash (PROGMEM)
-- optimized fast line clipping #0=off, #1=cut corners, #2=clip using circle, use "#define FASTLINE_CLIP <mode>"
+- optimized fast line clipping #0=off, #1=cut corners, #2=clip using circle, use "#define FASTLINE_CLIP mode"
 
 ## Tested displays:
 
