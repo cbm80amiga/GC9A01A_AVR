@@ -8,28 +8,39 @@
 // https://github.com/cbm80amiga/RREFont
 
 /*
- GC9A01A 240x240/round connections (only 4+2 wires required):
+ GC9A01A 240x240 round 1.28" IPS, round PCB variant, version with RST and DC only:
 
  #01 VCC -> VCC (3.3V only?)
  #02 GND -> GND
  #03 SCL -> D13/SCK
  #04 SDA -> D11/MOSI
  #05 DC  -> D9 or any digital
- #06 CS  -> D10 or any digital
- #07 RST -> opt
+ #06 CS  -> optional, when not used then CS_ALWAYS_LOW should be defined
+ #07 RST -> D10 or any digital
+
+ GC9A01A 240x240 round 1.28" IPS, square PCB variant, version with RST and DC only:
+
+ #01 GND -> GND
+ #02 VCC -> VCC (3.3V only?)
+ #03 SCL -> D13/SCK
+ #04 SDA -> D11/MOSI
+ #05 RST -> D10 or any digital
+ #06 DC  -> D9 or any digital
+ #07 CS  -> optional, when not used then CS_ALWAYS_LOW should be defined
+ #08 BLK -> NC or VCC
 */
 
 #include <SPI.h>
 #include <Adafruit_GFX.h>
 #include "GC9A01A_AVR.h"
 
-#define TFT_DC   9
-#define TFT_CS  10
-#define BUTTON   3
-
 #define SCR_WD 240
 #define SCR_HT 240
-GC9A01A_AVR lcd(TFT_CS, TFT_DC);
+
+#define TFT_CS  -1
+#define TFT_DC   9
+#define TFT_RST  10
+GC9A01A_AVR lcd(TFT_CS, TFT_DC, TFT_RST);
 
 #include "RREFont.h"
 #include "rre_simple.h"
@@ -59,8 +70,8 @@ void drawClock()
   uint16_t bg2d = RGBto565(30,30,30);
   uint16_t col;
   int ss,cc;
-  int r0=127-1;
-  int r1=r0-20;
+  int r0=127;
+  int r1=r0-14;
   int r2=r1-6;
   wheelStart = (mn+hr*60)>>2;
   int st=0,en=60-1;
@@ -116,8 +127,9 @@ void setup(void)
 {
   Serial.begin(115200);
   lcd.init();
+  //lcd.setRotation(0); // for square PCB
   lcd.fillScreen(BLACK);
-  
+
   setFont(&rre_digits_arialb60v);
   //setFont(&rre_digits_arial60v);
   setDigitWdAA(13);

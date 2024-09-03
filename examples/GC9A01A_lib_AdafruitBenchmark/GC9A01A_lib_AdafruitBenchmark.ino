@@ -4,27 +4,39 @@
 // https://youtu.be/9RZII8Vx2ZY
 
 /*
- GC9A01A 240x240 round 1.28" IPS - only 4+2 wires required:
+ GC9A01A 240x240 round 1.28" IPS, round PCB variant, version with RST and DC only:
 
  #01 VCC -> VCC (3.3V only?)
  #02 GND -> GND
  #03 SCL -> D13/SCK
  #04 SDA -> D11/MOSI
  #05 DC  -> D9 or any digital
- #06 CS  -> D10 or any digital
- #07 RST -> opt
+ #06 CS  -> optional, when not used then CS_ALWAYS_LOW should be defined
+ #07 RST -> D10 or any digital
+
+ GC9A01A 240x240 round 1.28" IPS, square PCB variant, version with RST and DC only:
+
+ #01 GND -> GND
+ #02 VCC -> VCC (3.3V only?)
+ #03 SCL -> D13/SCK
+ #04 SDA -> D11/MOSI
+ #05 RST -> D10 or any digital
+ #06 DC  -> D9 or any digital
+ #07 CS  -> optional, when not used then CS_ALWAYS_LOW should be defined
+ #08 BLK -> NC or VCC
 */
 
 #include <SPI.h>
 #include <Adafruit_GFX.h>
 #include "GC9A01A_AVR.h"
 
-#define TFT_DC   9
-#define TFT_CS  10
-
 #define SCR_WD 240
 #define SCR_HT 240
-GC9A01A_AVR tft(TFT_CS, TFT_DC);
+
+#define TFT_CS  -1 // if not used define CS_ALWAYS_LOW in GC9A01A_AVR.h
+#define TFT_DC   9
+#define TFT_RST  10
+GC9A01A_AVR tft(TFT_CS, TFT_DC, TFT_RST);
 
 // ------------------------------------------------
 unsigned long FillScreenTest()

@@ -49,7 +49,7 @@
 class GC9A01A_AVR : public Adafruit_GFX {
 
  public:
-  GC9A01A_AVR(int8_t DC, int8_t RST, int8_t CS = -1);
+  GC9A01A_AVR(int8_t cs, int8_t dc, int8_t rst=-1);
 
   void init(uint16_t width, uint16_t height);
   void begin() { init(GC9A01A_TFTWIDTH,GC9A01A_TFTHEIGHT); }
